@@ -13,18 +13,22 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/itemNoteName"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:editable="false"
+                android:maxLines="2"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
 
         </LinearLayout>
 
         <TextView
-            android:text="content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/itemNoteContent" />
+            android:id="@+id/itemNoteContent"
+            android:textSize="18sp"
+            android:maxLines="3" />
     </LinearLayout>
 </FrameLayout>
