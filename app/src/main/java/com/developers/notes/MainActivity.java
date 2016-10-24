@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity
                 Intent editNote = new Intent(MainActivity.this, EditNoteActivity.class);
                 editNote.putExtra("filename", fileName);
                 editNote.putExtra("notename", noteName);
+                int unicId = (int) id;
+                editNote.putExtra("kolvo", unicId);
                 startActivity(editNote);
             }
         });

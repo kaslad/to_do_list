@@ -1,6 +1,7 @@
 package com.developers.notes;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -15,6 +16,8 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns{
     public static final String DB_NAME = "NOTES";
     public static final String NOTE_NAME_COLUMN = "NOTE_NAME";
     public static final String FILE_NAME_COLUMN = "FILE_NAME";
+   // public static final String FILE_DATE_COLUMN = "FILE_DATE";
+   // public static final String FILE_TIME_COLUMN = "FILE_TIME";
     public DBHelper(Context context) {
         super(context, DB_NAME, null, 1);
     }
@@ -27,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns{
                 + FILE_NAME_COLUMN + " text,"
                 + NOTE_NAME_COLUMN + " text);");
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -35,6 +35,12 @@
             android:id="@+id/noteContentText"
             android:hint="Content" />
 
+        <TextView
+            android:text="trol1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

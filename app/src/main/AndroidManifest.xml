@@ -45,6 +45,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.developers.notes.MainActivity" />
         </activity>
+        <service android:name=".CreateNoti">
+            <intent-filter>
+                <action android:name="MyService"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
