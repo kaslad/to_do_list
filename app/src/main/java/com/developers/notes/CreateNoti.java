@@ -19,7 +19,8 @@ import static java.lang.System.currentTimeMillis;
 public class CreateNoti extends Service {
     private int i = 0;
     NotificationManager nm;
-    String upNoti;
+    String upNoti, notename;
+    int kolvo;
 
     public void onCreate() {
         super.onCreate();
@@ -28,13 +29,18 @@ public class CreateNoti extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         upNoti = intent.getStringExtra("upNoti");
+        notename = intent.getStringExtra("notename");
+        kolvo = intent.getIntExtra("kolvo" , 0);
 
         sendNotif();
         return super.onStartCommand(intent, flags, startId);
     }
     void sendNotif() {
 
-        Intent intent = new Intent(this, EditNoteActivity.class);///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("filename", upNoti);
+        intent.putExtra("notename", notename);
+        intent.putExtra("kolvo", kolvo);///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notif = new NotificationCompat.Builder(this)

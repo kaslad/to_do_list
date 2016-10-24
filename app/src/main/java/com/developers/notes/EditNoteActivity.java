@@ -112,6 +112,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 inputStream.close();
                 noteContentText.setText(builder.toString());
             }
+
         } catch (Throwable t) {
             Toast.makeText(getApplicationContext(),
                     "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
@@ -122,9 +123,7 @@ public class EditNoteActivity extends AppCompatActivity {
     public void onclick (View view){
         showDialog(DIALOG_TIME);
     }
-    public void onclick2(View view) {
-        showDialog(DIALOG_DATE);
-    }
+    public void onclick2(View view) {showDialog(DIALOG_DATE);}
 
     protected Dialog onCreateDialog(int id){
         if(id == DIALOG_TIME) {
@@ -185,7 +184,7 @@ public class EditNoteActivity extends AppCompatActivity {
             am.testing(noteContentText.getText().toString(), unicId);
         }
         else {
-            am.setText(noteContentText.getText().toString(), unicId);
+            am.setText(noteContentText.getText().toString(), unicId, noteNameText.getText().toString());
             am.run();
         }
     }

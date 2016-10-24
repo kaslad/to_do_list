@@ -131,7 +131,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     public void kre (){
 
         AlarmTask am = new AlarmTask(this, call);
-        am.setText(noteContentText.getText().toString(), mCount);
+        am.setText(noteContentText.getText().toString(), mCount, noteNameText.getText().toString());
         am.run();
     }
 
@@ -161,8 +161,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             String fileName = saveNote();
             cv.put(DBHelper.FILE_NAME_COLUMN, fileName);
             cv.put(DBHelper.NOTE_NAME_COLUMN, noteName);
-           // cv.put(DBHelper.FILE_DATE_COLUMN, date);
-           // cv.put(DBHelper.FILE_TIME_COLUMN, time);
+            cv.put(DBHelper.FILE_DATE_COLUMN, date);
+            cv.put(DBHelper.FILE_TIME_COLUMN, time);
            // notesDB.insert(DBHelper.TABLE_NAME, null, cv);
             mCount = (int) notesDB.insert(DBHelper.TABLE_NAME, null, cv);
             Log.d(LOG_TAG, "row inserted, ID = " + mCount);

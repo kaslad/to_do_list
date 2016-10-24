@@ -19,8 +19,9 @@ public class AlarmTask implements Runnable {
     private final AlarmManager am;
     // Your context to retrieve the alarm manager from
     private final Context context;
-    String upNoti;
+    String upNoti, notename;
     int unicId;
+    PendingIntent pendingIntent;
 
     public AlarmTask(Context context, Calendar date) {
         this.context = context;
@@ -28,9 +29,10 @@ public class AlarmTask implements Runnable {
         this.date = date;
 
     }
-    public void setText(String upNoti, int unicId) {
+    public void setText(String upNoti, int unicId, String noteName) {
         this.upNoti = upNoti;
         this.unicId = unicId;
+        this.notename = noteName;
         Log.d("cot", "row inserted, ID = " + unicId + upNoti);
     }
 
@@ -38,7 +40,7 @@ public class AlarmTask implements Runnable {
         Intent intent = new Intent(context, CreateNoti.class);
         intent.putExtra("upNoti", upNoti);
         intent.putExtra("kolvo", unicId);
-        PendingIntent pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
+        pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
     }
 
     @Override
@@ -50,7 +52,8 @@ public class AlarmTask implements Runnable {
         Intent intent = new Intent(context, CreateNoti.class);
         intent.putExtra("upNoti", upNoti);
         intent.putExtra("kolvo", unicId);
-        PendingIntent pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
+        intent.putExtra("notename", notename);
+        pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
 
         // Sets an alarm - note this alarm will be lost if the phone is turned off and on again
         am.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);
