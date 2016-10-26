@@ -41,7 +41,7 @@ public class CreateNoti extends Service {
         intent.putExtra("filename", upNoti);
         intent.putExtra("notename", notename);
         intent.putExtra("kolvo", kolvo);///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pIntent = PendingIntent.getActivity(this, kolvo, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notif = new NotificationCompat.Builder(this)
                 .setContentTitle(upNoti)
@@ -56,13 +56,13 @@ public class CreateNoti extends Service {
                 .build();
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, notif);
+        notificationManager.notify(kolvo, notif);
 
 
 
         notif.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        nm.notify(1, notif);
+        //nm.notify(kolvo, notif);
 
         stopSelf();
 

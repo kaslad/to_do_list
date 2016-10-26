@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     public static final String FILE_EXTENSION = "note";
     EditText noteContentText;
     EditText noteNameText;
+    Button btnDone;
     DBHelper dbHelper;
     SQLiteDatabase notesDB;
     Intent intent;
@@ -59,6 +61,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         noteContentText = (EditText) findViewById(R.id.noteContentText);
         noteNameText = (EditText) findViewById(R.id.noteNameText);
+        btnDone = (Button) findViewById(R.id.btnDone);
         dbHelper = new DBHelper(this);
 
         tvTime = (TextView) findViewById(R.id.tvTime);
@@ -153,7 +156,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         return fileName;
     }
     final String LOG_TAG = "myLogs";
-    public void onBackPressed() {
+
+    public void onclickDone(View view){
         if (!noteContentText.getText().toString().isEmpty()) {
             ContentValues cv = new ContentValues();
             notesDB = dbHelper.getWritableDatabase();
@@ -163,7 +167,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             cv.put(DBHelper.NOTE_NAME_COLUMN, noteName);
             cv.put(DBHelper.FILE_DATE_COLUMN, date);
             cv.put(DBHelper.FILE_TIME_COLUMN, time);
-           // notesDB.insert(DBHelper.TABLE_NAME, null, cv);
+            // notesDB.insert(DBHelper.TABLE_NAME, null, cv);
             mCount = (int) notesDB.insert(DBHelper.TABLE_NAME, null, cv);
             Log.d(LOG_TAG, "row inserted, ID = " + mCount);
             dbHelper.close();

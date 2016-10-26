@@ -92,7 +92,6 @@ public class EditNoteActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void openNote(String fileName) {
@@ -189,7 +188,7 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void onBackPressed() {
+    public void onclickDone (View view) {
         if (!noteContentText.getText().toString().isEmpty()) {
             saveNote(fileName);
         }

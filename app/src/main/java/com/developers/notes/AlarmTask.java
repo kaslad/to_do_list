@@ -37,10 +37,12 @@ public class AlarmTask implements Runnable {
     }
 
     public void testing (String upNoti, int unicId){
+        this.unicId = unicId;
+        this.upNoti = upNoti;
         Intent intent = new Intent(context, CreateNoti.class);
-        intent.putExtra("upNoti", upNoti);
-        intent.putExtra("kolvo", unicId);
-        pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
+        intent.putExtra("upNoti", this.upNoti);
+        intent.putExtra("kolvo", this.unicId);
+        pendingIntent = PendingIntent.getService(context, this.unicId, intent, 0);
     }
 
     @Override
