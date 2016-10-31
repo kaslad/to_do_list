@@ -96,6 +96,7 @@ public class EditNoteActivity extends AppCompatActivity {
         openNote(fileName);
         //TODO get filename from database
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     private void saveNote(String fileName) {
