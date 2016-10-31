@@ -19,7 +19,7 @@ public class AlarmTask implements Runnable {
     private final AlarmManager am;
     // Your context to retrieve the alarm manager from
     private final Context context;
-    String upNoti, notename;
+    String upNoti;
     int unicId;
     PendingIntent pendingIntent;
 
@@ -29,10 +29,9 @@ public class AlarmTask implements Runnable {
         this.date = date;
 
     }
-    public void setText(String upNoti, int unicId, String noteName) {
+    public void setText(String upNoti, int unicId) {
         this.upNoti = upNoti;
         this.unicId = unicId;
-        this.notename = noteName;
         Log.d("cot", "row inserted, ID = " + unicId + upNoti);
     }
 
@@ -43,7 +42,23 @@ public class AlarmTask implements Runnable {
         intent.putExtra("upNoti", this.upNoti);
         intent.putExtra("kolvo", this.unicId);
         pendingIntent = PendingIntent.getService(context, this.unicId, intent, 0);
+
+
     }
+
+    public void delAl (String upNoti, int unicId) {
+        am.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);
+        Intent intent = new Intent(context, CreateNoti.class);
+        intent.putExtra("upNoti", upNoti);
+        intent.putExtra("kolvo", unicId);
+        Log.d("cot", "cancel inserted, ID = " + unicId + upNoti);
+        pendingIntent = PendingIntent.getService(context, unicId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // Sets an alarm - note this alarm will be lost if the phone is turned off and on again
+        //am.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);
+        am.cancel(pendingIntent);
+    }
+
 
     @Override
     public void run() {
@@ -54,8 +69,7 @@ public class AlarmTask implements Runnable {
         Intent intent = new Intent(context, CreateNoti.class);
         intent.putExtra("upNoti", upNoti);
         intent.putExtra("kolvo", unicId);
-        intent.putExtra("notename", notename);
-        pendingIntent = PendingIntent.getService(context, unicId, intent, 0);
+        pendingIntent = PendingIntent.getService(context, unicId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Sets an alarm - note this alarm will be lost if the phone is turned off and on again
         am.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);

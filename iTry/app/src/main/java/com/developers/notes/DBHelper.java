@@ -18,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns{
     public static final String FILE_NAME_COLUMN = "FILE_NAME";
     public static final String FILE_DATE_COLUMN = "FILE_DATE";
     public static final String FILE_TIME_COLUMN = "FILE_TIME";
+    public static final String KEY_ID = "_id";
     public DBHelper(Context context) {
         super(context, DB_NAME, null, 1);
     }
@@ -26,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns{
     public void onCreate(SQLiteDatabase db) {
         // создаем таблицу с полями
         db.execSQL("create table " + TABLE_NAME + " ("
-                + "_id integer primary key autoincrement,"
+                + KEY_ID + " integer primary key,"
                 + FILE_NAME_COLUMN + " text,"
                 + NOTE_NAME_COLUMN + " text,"
                 + FILE_DATE_COLUMN + " text,"

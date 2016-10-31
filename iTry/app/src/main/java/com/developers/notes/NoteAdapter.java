@@ -16,9 +16,7 @@ import java.io.InputStreamReader;
 
 import static com.developers.notes.CreateNoteActivity.FILE_EXTENSION;
 
-/**
- * Created by avispa on 17.10.2016.
- */
+
 
 public class NoteAdapter extends CursorAdapter {
     Context ctx;

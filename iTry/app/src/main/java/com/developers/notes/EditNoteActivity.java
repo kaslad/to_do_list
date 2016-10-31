@@ -2,11 +2,14 @@ package com.developers.notes;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +53,7 @@ public class EditNoteActivity extends AppCompatActivity {
     int myYear = call.get(Calendar.YEAR);
     int myMonth = call.get(Calendar.MONTH);
     int myDay = call.get(Calendar.DAY_OF_MONTH);
-    String time = "time", date = "date";
+    String time, date;
     Intent intent;
     int unicId;
     boolean open = false;
@@ -75,6 +78,20 @@ public class EditNoteActivity extends AppCompatActivity {
         noteNameText.setText(editNote.getStringExtra("notename"));
         fileName = editNote.getStringExtra("filename");
         unicId = editNote.getIntExtra("kolvo", 0);
+        String m = "";
+        m = m + unicId;
+        String selection ="_id == ?";
+        String[] selectionArgs = new String[] {m};
+        Log.d("moh", "cursor id ana unic" + selection + unicId);
+        Cursor c = notesDB.query(DBHelper.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        if(c.moveToFirst()){
+            date = c.getString(c.getColumnIndex(DBHelper.FILE_DATE_COLUMN));
+            time = c.getString(c.getColumnIndex(DBHelper.FILE_TIME_COLUMN));
+        }
+        Log.d("moh", "date   time" + date + time);
+        c.close();
+        tvTime.setText(time);
+        tvDate.setText(date);
         Log.d("moh", "row inserted, ID = " + unicId);
         openNote(fileName);
         //TODO get filename from database
@@ -176,14 +193,28 @@ public class EditNoteActivity extends AppCompatActivity {
             TimeVisible();
         }
     };
+
+
     public void kre (){
 
-        AlarmTask am = new AlarmTask(this, call);
         if (!open) {
-            am.testing(noteContentText.getText().toString(), unicId);
+            if (!date.equals("date")) {
+                getDate();
+                AlarmTask am = new AlarmTask(this, call);
+                am.setText(noteContentText.getText().toString(), unicId);
+                am.run();
+            }
         }
         else {
-            am.setText(noteContentText.getText().toString(), unicId, noteNameText.getText().toString());
+            AlarmTask am = new AlarmTask(this, call);
+            ContentValues cv = new ContentValues();
+            notesDB = dbHelper.getWritableDatabase();
+            cv.put(DBHelper.FILE_DATE_COLUMN, date);
+            cv.put(DBHelper.FILE_TIME_COLUMN, time);
+            String z = "";
+            z = z + unicId;
+            notesDB.update(DBHelper.TABLE_NAME, cv, DBHelper.KEY_ID + "= ?", new String[] {z});
+            am.setText(noteContentText.getText().toString(), unicId);
             am.run();
         }
     }
@@ -194,5 +225,32 @@ public class EditNoteActivity extends AppCompatActivity {
         }
         kre();;
         super.onBackPressed();
+    }
+
+    public void getDate(){
+        String[] parts = time.split(" : ");
+        call.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+        call.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+        call.set(Calendar.SECOND, 0);
+        call.set(Calendar.MILLISECOND, 0);
+        String[] parts2 = date.split("/");
+        call.set(Calendar.YEAR, Integer.parseInt(parts2[0]));
+        call.set(Calendar.MONTH, Integer.parseInt(parts2[1]));
+        call.set(Calendar.DAY_OF_MONTH, Integer.parseInt(parts2[2]));
+
+    }
+    public void onclickDel (View view) {
+
+       if (!date.equals("date")) {
+           getDate();
+           AlarmTask am = new AlarmTask(this, call);
+           am.delAl(noteContentText.getText().toString(), unicId);
+        }
+
+        notesDB.delete(DBHelper.TABLE_NAME, DBHelper.KEY_ID + "=" + unicId, null);
+
+
+        super.onBackPressed();
+
     }
 }

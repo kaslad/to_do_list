@@ -11,12 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import static com.developers.notes.DBHelper.TABLE_NAME;
 
@@ -53,10 +55,10 @@ public class MainActivity extends AppCompatActivity
                 cursor.moveToPosition(position);
                 String fileName = cursor.getString(cursor.getColumnIndex(DBHelper.FILE_NAME_COLUMN));
                 String noteName = cursor.getString(cursor.getColumnIndex(DBHelper.NOTE_NAME_COLUMN));
+                int unicId =(int) cursor.getLong(cursor.getColumnIndex(DBHelper.KEY_ID));
                 Intent editNote = new Intent(MainActivity.this, EditNoteActivity.class);
                 editNote.putExtra("filename", fileName);
                 editNote.putExtra("notename", noteName);
-                int unicId = (int) id;
                 editNote.putExtra("kolvo", unicId);
                 startActivity(editNote);
             }
@@ -71,42 +73,49 @@ public class MainActivity extends AppCompatActivity
         };
         fab.setOnClickListener(fabOnClick);
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void updateListView() {
+        cursor = notesDB.query(TABLE_NAME, null, null, null, null, null, null);
+        noteAdapter = new NoteAdapter(MainActivity.this, cursor, 0);
+        noteAdapter.notifyDataSetChanged();
+        noteList.setAdapter(noteAdapter);
+    }
+
+    final String LOG_TAG = "myLogs";
 
     @Override
     protected void onResume() {
-        super.onResume();
+        updateListView();
         noteAdapter.notifyDataSetChanged();
         noteList.setAdapter(noteAdapter);
+        super.onResume();
+        Log.d(LOG_TAG, "resume");
     }
 
     protected void onRestart() {
+        updateListView();
         super.onRestart();
         noteAdapter.notifyDataSetChanged();
         noteList.setAdapter(noteAdapter);
+
+        Log.d(LOG_TAG, "restart");
+
+
     }
 
     protected void onStart() {
         super.onStart();
-        noteAdapter.notifyDataSetChanged();
+        noteAdapter = new NoteAdapter(MainActivity.this, cursor, 0);
         noteList.setAdapter(noteAdapter);
+
+
+        Log.d(LOG_TAG, "start");
+
     }
 
     public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
             super.onBackPressed();
-//        }
     }
 
     @Override

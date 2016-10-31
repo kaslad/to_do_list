@@ -33,6 +33,7 @@ import java.util.Date;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
+
     public static final String FILE_EXTENSION = "note";
     EditText noteContentText;
     EditText noteNameText;
@@ -58,9 +59,12 @@ public class CreateNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         noteContentText = (EditText) findViewById(R.id.noteContentText);
         noteNameText = (EditText) findViewById(R.id.noteNameText);
+
         btnDone = (Button) findViewById(R.id.btnDone);
         dbHelper = new DBHelper(this);
 
@@ -108,6 +112,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             TimeVisible();;
         }
     };
+
     public void TimeVisible(){
         time = (myHour + " : " + myMinute);
         tvTime.setText(time);
@@ -131,10 +136,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             TimeVisible();
         }
     };
+
     public void kre (){
 
         AlarmTask am = new AlarmTask(this, call);
-        am.setText(noteContentText.getText().toString(), mCount, noteNameText.getText().toString());
+        am.setText(noteContentText.getText().toString(), mCount);
         am.run();
     }
 
@@ -167,11 +173,19 @@ public class CreateNoteActivity extends AppCompatActivity {
             cv.put(DBHelper.NOTE_NAME_COLUMN, noteName);
             cv.put(DBHelper.FILE_DATE_COLUMN, date);
             cv.put(DBHelper.FILE_TIME_COLUMN, time);
-            // notesDB.insert(DBHelper.TABLE_NAME, null, cv);
-            mCount = (int) notesDB.insert(DBHelper.TABLE_NAME, null, cv);
+            notesDB.insert(DBHelper.TABLE_NAME, null, cv);
+
+            String selection = DBHelper.FILE_NAME_COLUMN + " == ?";
+            String[] selectionArgs = new String[] {fileName};
+            Log.d("moh", "cursor id ana unic" + selection + fileName);
+            Cursor c = notesDB.query(DBHelper.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+            if(c.moveToFirst()){
+                mCount = Integer.parseInt(c.getString(c.getColumnIndex(DBHelper.KEY_ID)));
+            }
             Log.d(LOG_TAG, "row inserted, ID = " + mCount);
-            dbHelper.close();
-            notesDB.close();
+            c.close();
+            //dbHelper.close();
+            ///notesDB.close();
         }
         if (open) {
             kre();
